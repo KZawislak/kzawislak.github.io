@@ -43,6 +43,7 @@ function App() {
     }
 
     const handleClick = () => {
+        console.log(getStatisticValues)
         console.log(singleDayTimes)
         console.log(multiDayTimes)
         console.log(expertModeProps)
@@ -113,7 +114,8 @@ function App() {
                     {/*    TODO: create graphs/statistics with this buttonclick*/}
                     {/*todo: validation that everything is filled out*/}
                 </div>
-                { showGraph ? <Evaluation statistic={getStatisticValues}/> : null}
+                {/*{ showGraph ? <Evaluation statistic={getStatisticValues}/> : null}*/}
+                { showGraph ? <Evaluation /> : null}
             </main>
         </div>
     )

@@ -1,11 +1,11 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { ExpertModeProps } from "src/App.tsx"
-interface EvaluationProps {
-    statistic: {
-        times: { start: string; end: string; } | { start: string; end: string; }[];
-        expertModeProps: ExpertModeProps;
-    }
-}
+// import { ExpertModeProps } from "src/App.tsx"
+// interface EvaluationProps {
+//     statistic: {
+//         times: { start: string; end: string; } | { start: string; end: string; }[];
+//         expertModeProps: ExpertModeProps;
+//     }
+// }
 const data = [
     {
         name: 'Page A',
@@ -51,7 +51,8 @@ const data = [
     },
 ];
 
-export default function Evaluation({statistic} : Readonly<EvaluationProps>) {
+
+export default function Evaluation() {
 
     return (
 
