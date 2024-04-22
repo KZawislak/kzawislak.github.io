@@ -115,7 +115,9 @@ function App() {
                     {/*todo: validation that everything is filled out*/}
                 </div>
                 {/*{ showGraph ? <Evaluation statistic={getStatisticValues}/> : null}*/}
+
                 { showGraph ? <Evaluation /> : null}
+
             </main>
         </div>
     )
