@@ -95,11 +95,11 @@ function App() {
         console.log(newData)
     }, [data])
     useEffect(() => {
-        handleDataChange( (draft) => {
+        handleDataChange((draft) => {
             draft.laboratoryAllDay = allDayMode;
             draft.laboratoryMultiDay = multiDayMode
         })
-    },[allDayMode, multiDayMode])
+    }, [allDayMode, multiDayMode])
 
     const handleDataChange = (fn: (draft: ICalculationData) => void): ICalculationData | undefined => {
         const modifiedData = produce(data, fn);
@@ -213,7 +213,7 @@ function App() {
             <header className="sticky top-0 flex h-16 items-center gap-4 border-b px-4 md:px-6 bg-background">
                 <h1 className="text-2xl grow"> Sepsis Prozess Diagnosse </h1>
                 <div className="flex items-center space-x-2">
-                    <Button onClick={setDemoData} />
+                    <Button onClick={setDemoData}/>
                     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
                         <ModeToggle/>
                     </ThemeProvider>
@@ -240,7 +240,7 @@ function App() {
                                                 <Card>
                                                     <CardContent className="flex items-center space-x-2 pt-6">
                                                         <Select defaultValue="monday"
-                                                                value={data?.arrivalDay?.toLocaleString()}
+                                                                value={data.arrivalDay.toLocaleString()}
                                                                 onValueChange={(e) => {
                                                                     handleDataChange((draft) => {
                                                                         draft.arrivalDay = Object.keys(Weekdays).indexOf(e);
@@ -410,14 +410,11 @@ function App() {
 
                     <Separator orientation={"vertical"}/>
                     <div className="basis-3/4 flex items-center">
-                        {/*{ showGraph ? <Evaluation statistic={getStatisticValues}/> : null}*/}
-                        {showGraph ?
-                            <Evaluation graphData={graphData} dataV={data}/> : null
-                        }
+                        <Evaluation graphData={graphData} dataV={data}/>
                     </div>
                 </div>
                 <div className="">
-                    <Button className="font-bold" onClick={handleClick}>Berechnung</Button>
+                    <Button className="font-bold hidden" onClick={handleClick}>Berechnung</Button>
                     {/*    TODO: create graphs/statistics with this buttonclick*/}
                     {/*todo: validation that everything is filled out*/}
                 </div>

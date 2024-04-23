@@ -117,7 +117,7 @@ export const presetGraphData: IGraphData[] = [
 ];
 
 export const demoData: ICalculationData = {
-    arrivalTime: "1",
+    arrivalTime: "06:00",
     arrivalDay: 1,
     transportTime: "2",
     // laboratoryHours: [{startTime: "", endTime: ""}],
