@@ -1,5 +1,5 @@
 import {Input} from "@/components/ui/input.tsx";
-import React, {useState} from "react";
+import React from "react";
 import {ICalculationData} from "@/types/Data.ts";
 
 interface TimePickerProps {
@@ -11,16 +11,13 @@ interface TimePickerProps {
 const inputClasses = "text-center max-w-52"
 
 export default function TimePicker({ onChange, data, index }: Readonly<TimePickerProps>) {
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
 
     const handleTimeStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setStartTime(e.target.value);
-        onChange(e.target.value, endTime);
+
+        onChange(e.target.value, data.laboratoryHours[index].endTime);
     };
     const handleTimeEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEndTime(e.target.value);
-        onChange(startTime, e.target.value);
+        onChange(data.laboratoryHours[index].startTime, e.target.value);
     };
 
     return <div className="flex gap-3 justify-center items-center md:flex-row grow">

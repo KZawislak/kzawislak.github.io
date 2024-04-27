@@ -1,8 +1,9 @@
 export interface ICalculationData {
     /** Time of Patient Arrival*/
     arrivalTime: string;
+    arrivalDuration: string;
     arrivalDay: Weekdays;
-    /** Transport of Bloodclutures to Laboratory */
+    /** Transport of Bloodcultures to Laboratory */
     transportTime: string;
     /** Laboratory OpeningTimes */
     /**0 - 6 = Monday - Sunday | 10 = singleDay */
@@ -14,17 +15,39 @@ export interface ICalculationData {
 
     germGrouping: string;
 
-    germType: EGermType;
-    germTypeMethod: IGermTypeMethod;
+
+    germTypeMethod: IGermTypeMethod; //state, welcher den wert verändert
 
     germGrow: string;
 
     antibioticMethod: IAntibioticMethod;
 
     communicationPatient: string;
+
+    // processSteps: IProcessSteps[];
+}
+//todo: erweiterte modus felder + quick berechnugn bars
+export interface IProcessSteps {
+    name: string;
+    time: number;
+    dependOnOpeningHours: boolean;
+
+    //TODO: Icon + jsx element (optional with ?)
+
+    //boolean abghängig von öffnungszeiten
+    // arrival: IArrival;
+    // transportTime: ITransport;
+    // incubation: IIncubation;
+    // germGrouping: IGermGrouping;
+    // germType: IGermTypeMethod;
+    // germGrow: IGermGrow;
+    // antibioticMethod: IAntibioticMethod;
+    // communicationPatient: ICommunicationPatien;
+
 }
 
 export interface IGermTypeMethod {
+    // germType: EGermType;
     type: EGermTypeMethod;
     time: string;
 }
@@ -35,9 +58,9 @@ export  interface IAntibioticMethod {
 }
 
 export enum EGermTypeMethod {
-    MOLECULAR,
-    MALDI,
-    BIOCHEM
+    MOLECULAR= "Molekulare Diagnostik",
+    MALDI="MALDI-TOF",
+    BIOCHEM="Biochemische Methode"
 }
 export enum EAntibioticMethod {
     PCA,
@@ -69,6 +92,7 @@ export interface IlaboratoryHours {
 
 export interface IGraphData {
     name: string,
+    wait?: number[],
     time: number[],
     duration: string
 }
@@ -115,16 +139,77 @@ export const presetGraphData: IGraphData[] = [
         duration: 1 + "h",
     },
 ];
+export const presetGraphDataWithWaiting = [
+    {
+        name: 'Blutkultur Entnahme',
+        invisible: 0,
+        wait: 0,
+        time: 1,
+        duration: 1 + "h",
+    },
+    {
+        name: 'Transport',
+        invisible: 1,
+        wait: 0,
+        time: 3,
+        duration: 2 + "h",
+    },
+    {
+        name: 'Inkubation',
+        invisible: 3,
+        wait: 5,
+        time: 16,
+        duration: 16 + "h",
+    },
+    {
+        name: 'Gramfärbung',
+        invisible: 24,
+        wait:8,
+        time: 1,
+        duration: 1 + "h",
+    },
+    {
+        name: 'Anzucht auf Agarplatte',
+        invisible: 33,
+        wait: 0,
+        time: 10,
+        duration: 10 + "h",
+    },
+    {
+        name: 'Keimart Erkennung',
+        invisible: 43,
+        wait: 13,
+        time: 1,
+        duration: 1 + "h",
+    },
+    {
+        name: 'Antibiogram',
+        invisible: 57,
+        wait: 0,
+        time: 6,
+        duration: 6 + "h",
+    },
+    {
+        name: 'Kommunikation Krankenhaus',
+        invisible: 63,
+        wait:0,
+        time: 1,
+        duration: 1 + "h",
+    },
+];
+
+
 
 export const demoData: ICalculationData = {
     arrivalTime: "06:00",
+    arrivalDuration: "1",
     arrivalDay: 1,
     transportTime: "2",
     // laboratoryHours: [{startTime: "", endTime: ""}],
     laboratoryHours: new Array(11).fill(null).map(() => ({startTime: '08:00', endTime: "16:00"})),
     laboratoryAllDay: false,
     laboratoryMultiDay: true,
-    germType: EGermType.AVERAGE,
+    // germType: EGermType.AVERAGE,
     incubation: "16",
     germGrouping: "1",
     germTypeMethod: {type: EGermTypeMethod.MALDI, time: "1"},
