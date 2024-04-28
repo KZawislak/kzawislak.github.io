@@ -59,14 +59,14 @@ export  interface IAntibioticMethod {
 
 export enum EGermTypeMethod {
     MOLECULAR= "Molekulare Diagnostik",
-    MALDI="MALDI-TOF",
-    BIOCHEM="Biochemische Methode"
+    MALDI= "MALDI-TOF",
+    BIOCHEM= "Biochemische Methode"
 }
 export enum EAntibioticMethod {
-    PCA,
-    ID,
-    AST,
-    OVERNIGHT,
+    PCA = "PCA",
+    ID = "ID",
+    AST = "AST",
+    OVERNIGHT = "Über Nacht Bebrütung",
 }
 
 export enum EGermType {
@@ -76,13 +76,13 @@ export enum EGermType {
 }
 
 export enum Weekdays {
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-    Sunday,
+    Monday = "Montag",
+    Tuesday = "Dienstag",
+    Wednesday = "Mittwoch",
+    Thursday = "Donnerstag",
+    Friday = "Freitag",
+    Saturday = "Samstag",
+    Sunday = "Sonntag",
 }
 
 export interface IlaboratoryHours {
@@ -203,7 +203,7 @@ export const presetGraphDataWithWaiting = [
 export const demoData: ICalculationData = {
     arrivalTime: "06:00",
     arrivalDuration: "1",
-    arrivalDay: 1,
+    arrivalDay: Weekdays.Monday,
     transportTime: "2",
     // laboratoryHours: [{startTime: "", endTime: ""}],
     laboratoryHours: new Array(11).fill(null).map(() => ({startTime: '08:00', endTime: "16:00"})),

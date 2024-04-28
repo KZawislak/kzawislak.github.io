@@ -435,7 +435,7 @@ const Step = React.forwardRef<HTMLLIElement, StepProps>(
             switch (isVertical) {
                 case true:
                     return (
-                        <VerticalStep ref={ref} {...sharedProps}>
+                        <VerticalStep ref={ref} {...sharedProps} >
                             {children}
                         </VerticalStep>
                     )
@@ -562,7 +562,7 @@ const VerticalStep = React.forwardRef<HTMLDivElement, VerticalStepProps>(
                     data-active={active}
                     className={cn(
                         "stepper__vertical-step-container",
-                        "flex items-center",
+                        "flex items-center cursor-pointer",
                         variant === "line" &&
                         "border-s-[3px] data-[active=true]:border-primary py-2 ps-3",
                         styles?.["vertical-step-container"]

@@ -1,5 +1,5 @@
 import moment from "moment";
-import {ICalculationData, IGraphData, IProcessSteps} from "@/types/Data.ts";
+import {ICalculationData, IGraphData} from "@/types/Data.ts";
 
 const openingTimes = (data: ICalculationData) => {
     const dataArray = []
@@ -7,7 +7,7 @@ const openingTimes = (data: ICalculationData) => {
         for (let day = 0; day < 7; day++) {
             const start = 0 + day * 24;
             const end = 24 + day * 24;
-            const weekday = (data.arrivalDay + day) % 7
+            const weekday = (Number(data.arrivalDay) + day) % 7 //(data.arrivalDay + day) % 7
             dataArray.push({start: start, end: end, weekday: weekday})
         }
         return dataArray;
@@ -15,7 +15,7 @@ const openingTimes = (data: ICalculationData) => {
 
     if (data.laboratoryMultiDay) {
         for (let i = 0; i < 7; i++) {
-            const day = (data.arrivalDay + i) % 7
+            const day = (Number(data.arrivalDay) + i) % 7
             const start = Number(moment(data.laboratoryHours[day].startTime, "hh:mm").format("HH")) + i * 24
             const end = Number(moment(data.laboratoryHours[day].endTime, "hh:mm").format("HH")) + i * 24
 
@@ -27,7 +27,7 @@ const openingTimes = (data: ICalculationData) => {
     for (let day = 0; day < 7; day++) {
         const startH = Number(moment(data.laboratoryHours[10].startTime, "hh:mm").format("HH")) + day * 24;
         const endH = Number(moment(data.laboratoryHours[10].endTime, "hh:mm").format("HH")) + day * 24;
-        const weekday = (data.arrivalDay + day) % 7
+        const weekday = (Number(data.arrivalDay) + day) % 7
         dataArray.push({start: startH, end: endH, weekday: weekday})
     }
     // console.log(dataArray)
@@ -56,7 +56,7 @@ const checkStartTimeInsideOpeningHours = (data: ICalculationData, start: number,
         start = adjustedStart;
         end = start + distance
     }
-    console.log([start, end])
+
     return [start, end];
 }
 
@@ -160,79 +160,79 @@ const graphDataCalculation = (data: ICalculationData): IGraphData[] => {
     ]
 }
 
-const graphDataCalculationWithWaitingTime = (data: ICalculationData) => {
-    // const graphData = []
-    //let timePassed = 0
-    // for (const process of processSteps): {
-    //     const processGraphData = {
-    //             name: process.name,
-    //             invisible: data.arrivalTime,
-    //             wait: ( process.dependOnOpeningHours ? checkStartTimeInsideOpeningHours() : 0),
-    //             time: getHours(data.arrivalTime) + 1,
-    //             duration: 1 + "h",
-    //         }
-    //      timePassed = timePassed + process.time
-    //     graphData.push(...graphData, processGraphData)
-    // }
-
-    return [
-        {
-            name: 'Blutkultur Entnahme',
-            invisible: getHours(data.arrivalTime), //previous
-            wait: 0,
-            time: data.arrivalDuration, //duration
-            duration: 1 + "h",
-        },
-        {
-            name: 'Transport',
-            invisible: getHours(data.arrivalTime) + data.arrivalDuration, //AddWholeDay(previous)
-            wait: 0,
-            time: data.transportTime,
-            duration: data.transportTime + "h",
-        },
-        {
-            name: 'Inkubation',
-            invisible: getHours(data.arrivalTime) + data.arrivalDuration + data.transportTime,
-            wait: 5,
-            time: 16,
-            duration: 16 + "h",
-        },
-        {
-            name: 'Gramfärbung',
-            invisible: 24,
-            wait:8,
-            time: 1,
-            duration: 1 + "h",
-        },
-        {
-            name: 'Anzucht auf Agarplatte',
-            invisible: 33,
-            wait: 0,
-            time: 10,
-            duration: 10 + "h",
-        },
-        {
-            name: 'Keimart Erkennung',
-            invisible: 43,
-            wait: 13,
-            time: 1,
-            duration: 1 + "h",
-        },
-        {
-            name: 'Antibiogram',
-            invisible: 57,
-            wait: 0,
-            time: 6,
-            duration: 6 + "h",
-        },
-        {
-            name: 'Kommunikation Krankenhaus',
-            invisible: 63,
-            wait:0,
-            time: 1,
-            duration: 1 + "h",
-        },
-    ];
-}
+// const graphDataCalculationWithWaitingTime = (data: ICalculationData) => {
+//     // const graphData = []
+//     //let timePassed = 0
+//     // for (const process of processSteps): {
+//     //     const processGraphData = {
+//     //             name: process.name,
+//     //             invisible: data.arrivalTime,
+//     //             wait: ( process.dependOnOpeningHours ? checkStartTimeInsideOpeningHours() : 0),
+//     //             time: getHours(data.arrivalTime) + 1,
+//     //             duration: 1 + "h",
+//     //         }
+//     //      timePassed = timePassed + process.time
+//     //     graphData.push(...graphData, processGraphData)
+//     // }
+//
+//     return [
+//         {
+//             name: 'Blutkultur Entnahme',
+//             invisible: getHours(data.arrivalTime), //previous
+//             wait: 0,
+//             time: data.arrivalDuration, //duration
+//             duration: 1 + "h",
+//         },
+//         {
+//             name: 'Transport',
+//             invisible: getHours(data.arrivalTime) + data.arrivalDuration, //AddWholeDay(previous)
+//             wait: 0,
+//             time: data.transportTime,
+//             duration: data.transportTime + "h",
+//         },
+//         {
+//             name: 'Inkubation',
+//             invisible: getHours(data.arrivalTime) + data.arrivalDuration + data.transportTime,
+//             wait: 5,
+//             time: 16,
+//             duration: 16 + "h",
+//         },
+//         {
+//             name: 'Gramfärbung',
+//             invisible: 24,
+//             wait:8,
+//             time: 1,
+//             duration: 1 + "h",
+//         },
+//         {
+//             name: 'Anzucht auf Agarplatte',
+//             invisible: 33,
+//             wait: 0,
+//             time: 10,
+//             duration: 10 + "h",
+//         },
+//         {
+//             name: 'Keimart Erkennung',
+//             invisible: 43,
+//             wait: 13,
+//             time: 1,
+//             duration: 1 + "h",
+//         },
+//         {
+//             name: 'Antibiogram',
+//             invisible: 57,
+//             wait: 0,
+//             time: 6,
+//             duration: 6 + "h",
+//         },
+//         {
+//             name: 'Kommunikation Krankenhaus',
+//             invisible: 63,
+//             wait:0,
+//             time: 1,
+//             duration: 1 + "h",
+//         },
+//     ];
+// }
 
 export {graphDataCalculation, openingTimes}

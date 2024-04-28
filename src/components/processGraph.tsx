@@ -11,7 +11,7 @@ import {
     ResponsiveContainer, Label, ReferenceLine
 } from 'recharts';
 import moment from "moment/moment";
-import {ICalculationData, IGraphData, presetGraphDataWithWaiting, Weekdays} from "@/types/Data.ts";
+import {ICalculationData, IGraphData, Weekdays} from "@/types/Data.ts";
 import {openingTimes} from "@/Utils/graphDataUtils.tsx";
 
 interface ProcessGraphProps {
@@ -69,7 +69,7 @@ Returns the start and endtimes in terms of hours in an array given a set start a
                        width={80}
                        tickSize={10}
                 >
-                    <Label value="Time" position="insideBottom"/>
+                    <Label value="Zeit" position="insideBottom"/>
                 </XAxis>
                 <YAxis type="category" dataKey="name">
                     <Label value="Prozessschritt" angle={-90} position="insideLeft" offset={-55}/>
@@ -92,7 +92,7 @@ Returns the start and endtimes in terms of hours in an array given a set start a
                 {openingTimes(dataV).map((interval, index) => (
                     <ReferenceArea key={index} x1={interval.start} x2={interval.end} fill="hsl(var(--foreground))">
                         <Label value="Öffnungszeiten" position="bottom"/>
-                        <Label value={Weekdays[interval.weekday]} fill="orange" position="top" offset={10} fontSize={14}/>
+                        <Label value={Object.values(Weekdays)[interval.weekday]} fill="orange" position="top" offset={10} fontSize={14}/>
                     </ReferenceArea>
                 ))}
                 {/*Bars with their Descriptive Labels*/}

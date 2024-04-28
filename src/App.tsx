@@ -5,16 +5,7 @@ import {Label} from "@/components/ui/label.tsx";
 import ProcessGraph from "@/components/processGraph.tsx";
 import {Step, type StepItem, Stepper, useStepper,} from "@/components/ui/stepper"
 import OpeningTimes from "@/components/openingTimes.tsx";
-import {
-    Ambulance,
-    DoorOpen,
-    FlaskConical,
-    Hospital,
-    Microscope,
-    ShieldPlus,
-    Tablets,
-    User
-} from "lucide-react";
+import {Ambulance, DoorOpen, FlaskConical, Hospital, Microscope, ShieldPlus, Tablets, User} from "lucide-react";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {
@@ -29,7 +20,8 @@ import {
 import {produce} from "immer"
 import {
     demoData,
-    EAntibioticMethod, EGermTypeMethod,
+    EAntibioticMethod,
+    EGermTypeMethod,
     ICalculationData,
     presetGraphData,
     Weekdays
@@ -49,7 +41,8 @@ const createNewData = (): ICalculationData => {
     return {
         arrivalTime: "15:00",
         arrivalDuration: "1",
-        arrivalDay: 0,
+        //TODO: default values dont take the enum properly
+        arrivalDay: Weekdays.Monday,
         transportTime: "1",
         laboratoryHours: new Array(11).fill(null).map(() => ({startTime: '08:00', endTime: "16:00"})),
         laboratoryAllDay: false,
@@ -148,11 +141,11 @@ function App() {
                     size="sm"
                     variant="secondary"
                 >
-                    Prev
+                    Zurück
                 </Button>
                 {/*|| (!expertMode && isOptionalStep) -> disabled Next Button whenever all Elements in the Expert Category are not shown*/}
                 <Button size="sm" onClick={nextStep} disabled={isLastStep || (!expertMode && isOptionalStep)}>
-                    {isOptionalStep ? "Skip" : "Next"}
+                    Nächster
                 </Button>
             </div>
         )
@@ -173,7 +166,7 @@ function App() {
                         <div className="flex items-center mb-4">
                             <Switch id="expertModeSwitch" checked={expertMode}
                                     onCheckedChange={setExpertMode}></Switch>
-                            <Label htmlFor="expertModeSwitch">Erweiterter Modus</Label>
+                            <Label htmlFor="expertModeSwitch" className="pl-2">Erweiterter Modus</Label>
                         </div>
 
                         <Stepper orientation="vertical" initialStep={0}
@@ -187,11 +180,12 @@ function App() {
                                             <div className="grid gap-4 md:gap-16 grid-cols-1 basis-1/2 min-w-96">
                                                 <Card>
                                                     <CardContent className="flex items-center space-x-2 pt-6">
-                                                        <Select defaultValue="monday"
-                                                                value={data.arrivalDay.toLocaleString()}
+                                                        <Select defaultValue={data.arrivalDay}
+                                                                // TODO: default values of enums not working
+                                                                value={data.arrivalDay}
                                                                 onValueChange={(e) => {
                                                                     handleDataChange((draft) => {
-                                                                        draft.arrivalDay = Object.keys(Weekdays).indexOf(e);
+                                                                        draft.arrivalDay = e as Weekdays;
                                                                     })
                                                                 }}>
                                                             <SelectTrigger>
@@ -200,19 +194,17 @@ function App() {
                                                             <SelectContent>
                                                                 <SelectGroup>
                                                                     <SelectLabel>Wochentag:</SelectLabel>
-                                                                    <SelectItem value="0">Montag</SelectItem>
-                                                                    <SelectItem value="1">Dienstag</SelectItem>
-                                                                    <SelectItem value="2">Mittwoch</SelectItem>
-                                                                    <SelectItem value="3">Donnerstag</SelectItem>
-                                                                    <SelectItem value="4">Freitag</SelectItem>
-                                                                    <SelectItem value="5">Samstag</SelectItem>
-                                                                    <SelectItem value="6">Sontag</SelectItem>
+                                                                    {Object.keys(Weekdays).map((value: string, index: number) =>
+                                                                        <SelectItem key={value}
+                                                                                    value={index.toString()}> {Weekdays[value as keyof typeof Weekdays]} </SelectItem>
+                                                                    )}
                                                                 </SelectGroup>
                                                             </SelectContent>
                                                         </Select>
                                                         <Input type="time" id="arrival" placeholder="~ 17:30"
                                                                value={data.arrivalTime} className="text-right"
                                                                name="arrivalTime"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.arrivalTime = e.target.value;
@@ -237,6 +229,7 @@ function App() {
                                                         <Input type="number" id="transportTime" placeholder="~ 1:30"
                                                                value={data.transportTime} className="text-right"
                                                                name="transportTime"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.transportTime = e.target.value;
@@ -277,6 +270,7 @@ function App() {
                                                         <Input type="number" id="incubationTime" placeholder="~ 1:30"
                                                                value={data.incubation} className="text-right"
                                                                name="incubationTime"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.incubation = e.target.value;
@@ -300,6 +294,7 @@ function App() {
                                                         <Input type="number" id="germGrouping" placeholder="~ 1:30"
                                                                value={data.germGrouping} className="text-right"
                                                                name="germGrouping"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.germGrouping = e.target.value;
@@ -324,13 +319,14 @@ function App() {
                                                         <Input type="number" id="germGrow" placeholder="~ 1:30"
                                                                value={data?.germGrow} className="text-right"
                                                                name="germGrow"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.germGrow = e.target.value;
                                                                    })
                                                                }}
                                                         />
-                                                        <Label htmlFor="transportTime">Stunden</Label>
+                                                        <Label htmlFor="germGrow">Stunden</Label>
                                                     </CardContent>
                                                     <Separator/>
                                                     <CardContent className="flex items-center space-x-2 pt-6">
@@ -338,7 +334,19 @@ function App() {
                                                                 value={data.germTypeMethod.type.toString()}
                                                                 onValueChange={(e) => {
                                                                     handleDataChange((draft) => {
-                                                                        draft.germTypeMethod.type = e;
+                                                                        draft.germTypeMethod.type = e as EGermTypeMethod;
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EGermTypeMethod)[e] == "MALDI-TOF"){
+                                                                            draft.germTypeMethod.time = "0.5";
+                                                                        }
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EGermTypeMethod)[e] == "Biochemische Methode"){
+                                                                            draft.germTypeMethod.time = "1";
+                                                                        }
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EGermTypeMethod)[e] == "Molekulare Diagnostik"){
+                                                                            draft.germTypeMethod.time = "24";
+                                                                        }
                                                                     })
                                                                     //change germtypemethod.time to basis value
                                                                 }}>
@@ -352,7 +360,7 @@ function App() {
                                                                         Erkennungsmethode:</SelectLabel>
                                                                     {Object.keys(EGermTypeMethod).map((value: string, index: number) =>
                                                                         <SelectItem key={value}
-                                                                                    value={index.toString()}> {EGermTypeMethod[value]} </SelectItem>
+                                                                                    value={index.toString()}> {EGermTypeMethod[value as keyof typeof EGermTypeMethod]} </SelectItem>
                                                                     )}
                                                                 </SelectGroup>
                                                             </SelectContent>
@@ -362,6 +370,7 @@ function App() {
                                                                value={data?.germTypeMethod.time}
                                                                className="text-right"
                                                                name="germTypeMethod"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.germTypeMethod.time = e.target.value;
@@ -385,24 +394,37 @@ function App() {
                                                                 value={data.antibioticMethod.type.toString()}
                                                                 onValueChange={(e: string) => {
                                                                     handleDataChange((draft) => {
-                                                                        draft.antibioticMethod.type = e;
+                                                                        draft.antibioticMethod.type = e as EAntibioticMethod;
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EAntibioticMethod)[e] == "PCA"){
+                                                                            draft.antibioticMethod.time = "1";
+                                                                        }
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EAntibioticMethod)[e] == "ID"){
+                                                                            draft.antibioticMethod.time = "1";
+                                                                        }
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EAntibioticMethod)[e] == "AST"){
+                                                                            draft.antibioticMethod.time = "6";
+                                                                        }
+                                                                        // @ts-expect-error WIP
+                                                                        if (Object.values(EAntibioticMethod)[e] == "Über Nacht Bebrütung"){
+                                                                            draft.antibioticMethod.time = "16";
+                                                                        }
                                                                     })
                                                                     //change germtypemethod.time to basis value
                                                                 }}>
                                                             <SelectTrigger>
                                                                 <SelectValue
-                                                                    placeholder="Keimart Erkennungsmethode"/>
+                                                                    placeholder="Antibiotikum Erkennungsmethode:"/>
                                                             </SelectTrigger>
                                                             <SelectContent>
                                                                 <SelectGroup>
-                                                                    <SelectLabel>Keimart
-                                                                        Erkennungsmethode:</SelectLabel>
-                                                                    {/*TODO: loop through enum*/}
-                                                                    <SelectItem value="PCA ">PCA</SelectItem>
-                                                                    <SelectItem value="id">ID</SelectItem>
-                                                                    <SelectItem value="ast">AST</SelectItem>
-                                                                    <SelectItem value="overnight">Über Nacht
-                                                                        Bebrütung</SelectItem>
+                                                                    <SelectLabel>Antibiotikum Erkennungsmethode:</SelectLabel>
+                                                                    {Object.keys(EAntibioticMethod).map((value: string, index: number) =>
+                                                                        <SelectItem key={value}
+                                                                                    value={index.toString()}> {EAntibioticMethod[value as keyof typeof EAntibioticMethod]} </SelectItem>
+                                                                    )}
                                                                 </SelectGroup>
                                                             </SelectContent>
                                                         </Select>
@@ -410,6 +432,7 @@ function App() {
                                                                placeholder="~ 1:30"
                                                                value={data.antibioticMethod.time} className="text-right"
                                                                name="antibioticMethodTime"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.antibioticMethod.time = e.target.value;
@@ -433,6 +456,7 @@ function App() {
                                                                placeholder="~ 1:30"
                                                                value={data.communicationPatient} className="text-right"
                                                                name="communicationPatient"
+                                                               min="0"
                                                                onChange={(e) => {
                                                                    handleDataChange((draft) => {
                                                                        draft.communicationPatient = e.target.value;
