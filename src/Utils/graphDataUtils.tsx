@@ -16,8 +16,8 @@ const openingTimes = (data: ICalculationData) => {
     if (data.laboratoryMultiDay) {
         for (let i = 0; i < 7; i++) {
             const day = (Number(data.arrivalDay) + i) % 7
-            const start = Number(moment(data.laboratoryHours[day].startTime, "hh:mm").format("HH")) + i * 24
-            const end = Number(moment(data.laboratoryHours[day].endTime, "hh:mm").format("HH")) + i * 24
+            const start = Number(moment(data.laboratoryHours[i].startTime, "hh:mm").format("HH")) + i * 24
+            const end = Number(moment(data.laboratoryHours[i].endTime, "hh:mm").format("HH")) + i * 24
 
             dataArray.push({start: start, end: end, weekday: day})
         }
