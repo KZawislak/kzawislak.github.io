@@ -475,7 +475,7 @@ function App() {
                             <StepButtons/>
                         </Stepper>
                     </div>
-                    <div className="md:basis-3/4 bg-card rounded-xl p-4 border flex items-center max-w-7xl">
+                    <div className="md:basis-3/4 bg-card rounded-xl p-4 border flex items-center max-w-7xl bg-card">
                         <ProcessGraph graphData={graphData} dataV={data}/>
                     </div>
                 </div>
